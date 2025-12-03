@@ -1,0 +1,17 @@
+services:
+  # MongoDB Private Service
+  - type: pserv
+    name: attendx-mongodb
+    runtime: docker
+    plan: starter  # Change to 'free' if you don't need persistent storage
+    region: oregon
+    dockerfilePath: ./Dockerfile
+    rootDir: ./mongodb
+    envVars:
+      - key: MONGO_INITDB_DATABASE
+        value: attendx
+    # Uncomment the following if you're on a paid plan with disk storage
+    # disk:
+    #   name: mongodb-data
+    #   mountPath: /data/db
+    #   sizeGB: 1
