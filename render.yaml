@@ -1,17 +1,26 @@
 services:
-  # MongoDB Private Service
-  - type: pserv
+  # MongoDB Web Service (with Authentication)
+  # WARNING: This is publicly accessible. Use strong credentials!
+  - type: web
     name: attendx-mongodb
     runtime: docker
-    plan: starter  # Change to 'free' if you don't need persistent storage
+    plan: free
     region: oregon
     dockerfilePath: ./Dockerfile
     rootDir: ./mongodb
     envVars:
+      # Database name
       - key: MONGO_INITDB_DATABASE
         value: attendx
-    # Uncomment the following if you're on a paid plan with disk storage
-    # disk:
-    #   name: mongodb-data
-    #   mountPath: /data/db
-    #   sizeGB: 1
+      
+      # CRITICAL: Set these in Render Dashboard for security
+      # DO NOT commit actual passwords to git!
+      - key: MONGO_INITDB_ROOT_USERNAME
+        sync: false  # Set manually in Render dashboard
+      
+      - key: MONGO_INITDB_ROOT_PASSWORD
+        generateValue: true  # Render will generate a secure password
+      
+      # Port for Render to expose
+      - key: PORT
+        value: "27017"
